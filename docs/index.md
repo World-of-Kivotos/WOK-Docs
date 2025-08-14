@@ -8,6 +8,8 @@ hero:
   image:
     src: /World_of_Kivotos.svg
     alt: World of Kivotos Logo
+    width: 400
+    height: 400
   actions:
     - theme: brand
       text: 加入我们
