@@ -1,0 +1,25 @@
+{
+  "name": "wok-docs",
+  "version": "1.0.0",
+  "description": "WOK项目文档 - 基于VitePress构建",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs"
+  },
+  "keywords": [
+    "vitepress",
+    "documentation",
+    "vue",
+    "markdown"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "vitepress": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
