@@ -6,15 +6,15 @@ hero:
   text: "我的世界 x 蔚蓝档案"
   tagline: 一群学生与朋友间用爱发电的产物，仅此而已
   image:
-    src: /World_of_Kivotos.png
+    src: /World_of_Kivotos.svg
     alt: World of Kivotos Logo
   actions:
     - theme: brand
-      text: 服务器介绍
-      link: /server/
-    - theme: alt
       text: 加入我们
       link: /server/join
+    - theme: alt
+      text: 服务器介绍
+      link: /server/
 
 features:
   - icon: 🎮
@@ -36,36 +36,3 @@ features:
     title: 规范管理
     details: 完善的服务器使用协议，保障所有玩家的游戏体验
 ---
-
-## 快速上手
-
-### 安装
-
-```bash
-# 克隆项目
-git clone <repository-url>
-cd wok-docs
-
-# 安装依赖
-npm install
-
-# 启动开发服务器
-npm run dev
-```
-
-### 开始编写
-
-在 `docs` 目录下创建 Markdown 文件即可开始编写文档。VitePress 会自动处理路由和导航。
-
-## 特性亮点
-
-- **Vue 驱动**: 在 Markdown 中使用 Vue 组件
-- **静态生成**: 构建为静态网站，部署简单
-- **SEO 友好**: 服务端渲染，搜索引擎优化
-- **主题定制**: 灵活的主题系统
-
----
-
-<div style="text-align: center; margin-top: 2rem;">
-  <p>🚀 开始探索 WOK 文档的强大功能吧！</p>
-</div>

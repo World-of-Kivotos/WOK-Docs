@@ -23,6 +23,7 @@ export default defineConfig({
           items: [
             { text: '服务器介绍', link: '/server/' },
             { text: '游戏玩法', link: '/server/gameplay' },
+            { text: '游戏安装指引', link: '/server/installation' },
             { text: '加入指南', link: '/server/join' }
           ]
         },
@@ -56,6 +57,7 @@ export default defineConfig({
           items: [
             { text: '服务器介绍', link: '/server/' },
             { text: '游戏玩法', link: '/server/gameplay' },
+            { text: '游戏安装指引', link: '/server/installation' },
             { text: '加入指南', link: '/server/join' }
           ]
         },
