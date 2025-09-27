@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: 'World of Kivotos',
   description: '我的世界 x 蔚蓝档案服务器官方文档',
-  base: '/WOK-Docs/',
+  base: '/',
   lang: 'zh-CN',
   
   // 主题配置
