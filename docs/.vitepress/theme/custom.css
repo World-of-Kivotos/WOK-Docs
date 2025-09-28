@@ -1,136 +1,28 @@
-/* 自定义主题样式 - 蔚蓝档案风格 */
+/* 原生VitePress主题样式 - 保持默认配色 */
 
-/* 自定义CSS变量 - 蔚蓝档案蓝白配色 */
-:root {
-  /* 主色调 - 蔚蓝档案蓝色系 */
-  --vp-c-brand-1: #2E86AB;
-  --vp-c-brand-2: #A23B72;
-  --vp-c-brand-3: #F18F01;
-  --vp-c-brand-soft: rgba(46, 134, 171, 0.14);
-  
-  /* 蔚蓝档案风格背景色 */
-  --vp-c-bg: #FFFFFF;
-  --vp-c-bg-alt: #F8FAFE;
-  --vp-c-bg-soft: #EDF4F8;
-  
-  /* 文字颜色 */
-  --vp-c-text-1: #1A365D;
-  --vp-c-text-2: #2D3748;
-  --vp-c-text-3: #4A5568;
-  
-  /* 边框颜色 */
-  --vp-c-divider: #E2E8F0;
-  --vp-c-border: #CBD5E0;
-  
-  /* 导航栏高度 */
-  --vp-nav-height: 64px;
+/* 基础响应式设计 */
+@media (max-width: 768px) {
+  .VPNav {
+    backdrop-filter: blur(8px);
+  }
 }
 
-/* 暗色主题 - 蔚蓝档案夜间模式 */
-.dark {
-  --vp-c-bg: #0F1419;
-  --vp-c-bg-alt: #1A202C;
-  --vp-c-bg-soft: #2D3748;
-  --vp-c-text-1: #F7FAFC;
-  --vp-c-text-2: #E2E8F0;
-  --vp-c-text-3: #A0AEC0;
-  --vp-c-divider: #4A5568;
-  --vp-c-border: #2D3748;
+/* 基础动画效果 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* 自定义导航栏样式 */
-.VPNav {
-  backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.95);
-  border-bottom: 1px solid var(--vp-c-divider);
-}
-
-.dark .VPNav {
-  background-color: rgba(15, 20, 25, 0.95);
-}
-
-/* 自定义logo样式 - 蔚蓝档案风格渐变 */
-.VPNavBarTitle .title {
-  font-weight: 700;
-  background: linear-gradient(135deg, #2E86AB, #A23B72);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* 自定义侧边栏样式 */
-.VPSidebar {
-  background: var(--vp-c-bg-soft);
-  border-right: 1px solid var(--vp-c-divider);
-}
-
-/* 自定义侧边栏链接样式 */
-.VPSidebarItem.level-0 .item .link {
-  font-weight: 600;
-}
-
-.VPSidebarItem.is-active > .item > .link {
-  background: linear-gradient(135deg, #2E86AB, #A23B72);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-weight: 700;
-}
-
-/* 自定义按钮样式 - 蔚蓝档案风格 */
-.VPButton.brand {
-  background: linear-gradient(135deg, #2E86AB, #A23B72);
-  border: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(46, 134, 171, 0.2);
-}
-
-.VPButton.brand:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(46, 134, 171, 0.3);
-}
-
-/* 自定义代码块样式 */
-.vp-code-group .tabs {
-  background: var(--vp-c-bg-soft);
-}
-
-.vp-code-group .tabs input:checked + label {
-  background: var(--vp-c-brand-1);
-  color: white;
-}
-
-/* 自定义提示框样式 - 蔚蓝档案配色 */
-.custom-block.tip {
-  border-left: 4px solid #2E86AB;
-  background: rgba(46, 134, 171, 0.1);
-}
-
-.custom-block.warning {
-  border-left: 4px solid #F18F01;
-  background: rgba(241, 143, 1, 0.1);
-}
-
-.custom-block.danger {
-  border-left: 4px solid #A23B72;
-  background: rgba(162, 59, 114, 0.1);
-}
-
-/* 自定义表格样式 */
-.vp-doc table {
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(46, 134, 171, 0.1);
-}
-
-.vp-doc th {
-  background: linear-gradient(135deg, #2E86AB, #A23B72);
-  color: white;
-  font-weight: 600;
-}
-
-.vp-doc tr:nth-child(even) {
-  background: var(--vp-c-bg-soft);
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3 {
+  animation: fadeInUp 0.6s ease-out;
 }
 
 /* 自定义滚动条 */
@@ -150,80 +42,4 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--vp-c-brand-2);
-}
-
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .VPNav {
-    backdrop-filter: blur(8px);
-  }
-}
-
-/* 动画效果 */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.vp-doc h1,
-.vp-doc h2,
-.vp-doc h3 {
-  animation: fadeInUp 0.6s ease-out;
-}
-
-/* 自定义链接样式 */
-.vp-doc a {
-  color: var(--vp-c-brand-1);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: all 0.3s ease;
-}
-
-.vp-doc a:hover {
-  border-bottom-color: var(--vp-c-brand-1);
-  transform: translateY(-1px);
-}
-
-/* 自定义徽章样式 */
-.VPBadge {
-  border-radius: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.VPBadge.tip {
-  background: linear-gradient(135deg, #2E86AB, #A23B72);
-}
-
-/* 首页特殊样式 - 蔚蓝档案风格 */
-.VPHome .VPHero .name {
-  background: linear-gradient(135deg, #2E86AB, #A23B72);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.VPHome .VPHero .tagline {
-  color: var(--vp-c-text-2);
-  font-size: 1.2rem;
-  line-height: 1.6;
-}
-
-/* 特色卡片样式增强 */
-.VPFeature {
-  border: 1px solid var(--vp-c-divider);
-  transition: all 0.3s ease;
-}
-
-.VPFeature:hover {
-  border-color: var(--vp-c-brand-1);
-  box-shadow: 0 4px 12px rgba(46, 134, 171, 0.15);
-  transform: translateY(-2px);
 }

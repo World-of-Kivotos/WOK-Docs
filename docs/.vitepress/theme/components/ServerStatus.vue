@@ -406,7 +406,7 @@ onMounted(() => {
   border-radius: 12px;
   padding: 1.5rem;
   margin: 1rem 0;
-  box-shadow: 0 2px 8px rgba(46, 134, 171, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .status-header {
@@ -596,7 +596,7 @@ onMounted(() => {
 }
 
 .progress-fill.players {
-  background: linear-gradient(90deg, #2E86AB, #A23B72);
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
 }
 
 .progress-fill.memory {
@@ -664,7 +664,7 @@ onMounted(() => {
 
 .world-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(46, 134, 171, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .world-header {
@@ -731,6 +731,7 @@ onMounted(() => {
 .stat-value.difficulty {
   text-align: center;
   background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-1);
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   font-size: 0.7rem;
@@ -753,7 +754,7 @@ onMounted(() => {
 
 .player-card:hover {
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(46, 134, 171, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .player-info {
