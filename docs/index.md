@@ -38,3 +38,6 @@ features:
     title: 规范管理
     details: 完善的服务器使用协议，保障所有玩家的游戏体验
 ---
+
+<!-- 服务器状态组件 -->
+<ServerStatus />
