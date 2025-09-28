@@ -1,0 +1,484 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "默认模块",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [],
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "summary": "健康检查-health",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "components": {
+                          "type": "object",
+                          "properties": {
+                            "cache": {
+                              "type": "string"
+                            },
+                            "spark": {
+                              "type": "string"
+                            },
+                            "data_collector": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "cache",
+                            "spark",
+                            "data_collector"
+                          ]
+                        },
+                        "version": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "timestamp": {
+                          "type": "integer"
+                        },
+                        "uptime": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "components",
+                        "version",
+                        "status",
+                        "timestamp",
+                        "uptime"
+                      ]
+                    },
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "timestamp": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "success",
+                    "timestamp"
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/system/resources": {
+      "get": {
+        "summary": "获取系统资源使用情况-system/resources",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/players/online": {
+      "get": {
+        "summary": "获取在线玩家数量-players/online",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/players/list": {
+      "get": {
+        "summary": "获取详细玩家列表-players/list",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "online_count": {
+                          "type": "integer"
+                        },
+                        "players": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "world": {
+                                "type": "string"
+                              },
+                              "level": {
+                                "type": "integer"
+                              },
+                              "ping": {
+                                "type": "integer"
+                              },
+                              "ip": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "health": {
+                                "type": "integer"
+                              },
+                              "game_mode": {
+                                "type": "string"
+                              },
+                              "location": {
+                                "type": "object",
+                                "properties": {
+                                  "x": {
+                                    "type": "number"
+                                  },
+                                  "y": {
+                                    "type": "number"
+                                  },
+                                  "z": {
+                                    "type": "number"
+                                  },
+                                  "pitch": {
+                                    "type": "number"
+                                  },
+                                  "yaw": {
+                                    "type": "number"
+                                  }
+                                },
+                                "required": [
+                                  "x",
+                                  "y",
+                                  "z",
+                                  "pitch",
+                                  "yaw"
+                                ]
+                              },
+                              "display_name": {
+                                "type": "string"
+                              },
+                              "uuid": {
+                                "type": "string"
+                              },
+                              "food_level": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "world",
+                              "level",
+                              "ping",
+                              "ip",
+                              "name",
+                              "health",
+                              "game_mode",
+                              "location",
+                              "display_name",
+                              "uuid",
+                              "food_level"
+                            ]
+                          }
+                        },
+                        "max_players": {
+                          "type": "integer"
+                        },
+                        "timestamp": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "online_count",
+                        "players",
+                        "max_players",
+                        "timestamp"
+                      ]
+                    },
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "timestamp": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "success",
+                    "timestamp"
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/worlds/list": {
+      "get": {
+        "summary": "获取世界列表和详细信息-worlds/list",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "details": {
+                          "type": "string"
+                        },
+                        "error": {
+                          "type": "boolean"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "timestamp": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "details",
+                        "error",
+                        "message",
+                        "timestamp"
+                      ]
+                    },
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "timestamp": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "success",
+                    "timestamp"
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/server/info": {
+      "get": {
+        "summary": "获取服务器基本信息-server/info",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "motd": {
+                          "type": "string"
+                        },
+                        "uptime_ms": {
+                          "type": "integer"
+                        },
+                        "hardcore": {
+                          "type": "boolean"
+                        },
+                        "allow_nether": {
+                          "type": "boolean"
+                        },
+                        "online_mode": {
+                          "type": "boolean"
+                        },
+                        "whitelist": {
+                          "type": "boolean"
+                        },
+                        "version": {
+                          "type": "string"
+                        },
+                        "bukkit_version": {
+                          "type": "string"
+                        },
+                        "allow_end": {
+                          "type": "boolean"
+                        },
+                        "port": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "uptime_formatted": {
+                          "type": "string"
+                        },
+                        "max_players": {
+                          "type": "integer"
+                        },
+                        "timestamp": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "motd",
+                        "uptime_ms",
+                        "hardcore",
+                        "allow_nether",
+                        "online_mode",
+                        "whitelist",
+                        "version",
+                        "bukkit_version",
+                        "allow_end",
+                        "port",
+                        "name",
+                        "uptime_formatted",
+                        "max_players",
+                        "timestamp"
+                      ]
+                    },
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "timestamp": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "success",
+                    "timestamp"
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/server/status": {
+      "get": {
+        "summary": "获取服务器运行状态-server/status",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/server/performance": {
+      "get": {
+        "summary": "获取服务器性能数据-server/performance",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {}
+  },
+  "servers": [],
+  "security": []
+}

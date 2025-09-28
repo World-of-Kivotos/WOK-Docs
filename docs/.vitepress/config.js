@@ -133,6 +133,19 @@ export default defineConfig({
 
   // 站点地图
   sitemap: {
-    hostname: 'https://your-domain.com'
+    hostname: 'https://docs.mcwok.cn'
+  },
+
+  // Vite 配置
+  vite: {
+    server: {
+      proxy: {
+        '/api': {
+          target: 'http://api.mcwok.cn:22222',
+          changeOrigin: true,
+          secure: false
+        }
+      }
+    }
   }
 })

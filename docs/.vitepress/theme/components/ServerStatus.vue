@@ -237,7 +237,7 @@ const worldsData = ref([])
 const systemData = ref(null)
 
 // API配置
-const API_BASE = 'http://api.mcwok.cn:22222/api/v1'
+const API_BASE = '/api/v1'
 
 // 连接状态
 const connectionStatus = computed(() => {
