@@ -237,9 +237,9 @@ const worldsData = ref([])
 const systemData = ref(null)
 
 // API配置 - 根据环境自动选择
-const API_BASE = import.meta.env.DEV 
+const API_BASE = import.meta.env.DEV
   ? '/api/v1'  // 开发环境使用代理
-  : 'http://api.mcwok.cn:22222/api/v1'  // 生产环境直接访问
+  : 'http://47.122.120.140:22222/api/v1'  // 生产环境直接使用 IP 访问
 
 // 连接状态
 const connectionStatus = computed(() => {
