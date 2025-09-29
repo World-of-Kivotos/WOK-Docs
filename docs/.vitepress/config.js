@@ -141,9 +141,12 @@ export default defineConfig({
     server: {
       proxy: {
         '/api': {
-          target: 'http://api.mcwok.cn:22222',
+          target: 'http://api.mcwok.cn:22222',  // 使用HTTP而不是HTTPS
           changeOrigin: true,
-          secure: false
+          secure: false,  // 禁用SSL验证
+          headers: {
+            'X-API-Key': 'sk-84wGfDajole8rMu2HHXkLFAKJMAmvl3t'
+          }
         }
       }
     }
