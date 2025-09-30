@@ -1,20 +1,15 @@
-# World of Kivotos 官方文档
+# WOK 官方文档 & 白名单管理系统
 
-这是 World of Kivotos 服务器的官方文档存放仓库。
+World of Kivotos 服务器的官方文档网站，集成了白名单管理功能。
 
-## 关于 World of Kivotos
+## ✨ 功能特性
 
-World of Kivotos 是一个我的世界 x 蔚蓝档案主题服务器，提供 RP/RPG 玩法体验。
+- 📖 **服务器文档** - 完整的游戏指南和说明
+- 🔐 **白名单管理** - 管理员可在线管理服务器白名单
+- 🎫 **玩家注册** - 用户自助注册系统
+- 📊 **服务器监控** - 实时性能和状态监控
 
-- **版本**: Minecraft Java Edition 1.20.1
-- **类型**: 公益服务器，无需正版验证
-- **移动端**: 支持通过 FCL 游玩
-
-## 文档访问
-
-在线文档地址：[https://world-of-kivotos.github.io/WOK-Docs/](https://world-of-kivotos.github.io/WOK-Docs/)
-
-## 本地开发
+## 🚀 快速开始
 
 ```bash
 # 安装依赖
@@ -23,7 +18,7 @@ npm install
 # 启动开发服务器
 npm run dev
 
-# 构建文档
+# 构建生产版本
 npm run build
 ```
 

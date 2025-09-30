@@ -1,0 +1,185 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* 毛玻璃效果基础类 */
+@layer components {
+  .glass {
+    @apply backdrop-blur-md bg-white/10 border border-white/20;
+  }
+  
+  .glass-card {
+    @apply glass rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+  
+  .glass-nav {
+    @apply glass rounded-xl backdrop-blur-xl bg-white/5 border-white/10;
+  }
+  
+  .glass-button {
+    @apply glass rounded-xl px-6 py-3 hover:bg-white/20 transition-all duration-200 cursor-pointer;
+  }
+  
+  .glass-input {
+    @apply glass rounded-xl px-4 py-3 placeholder:text-white/60 text-white bg-white/5 border-white/20 focus:border-primary focus:bg-white/10 transition-all duration-200;
+  }
+  
+  .glass-modal {
+    @apply glass rounded-3xl backdrop-blur-2xl bg-white/10 border-white/30 shadow-2xl;
+  }
+}
+
+/* 自定义毛玻璃动画效果 */
+@layer utilities {
+  .glass-shine {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .glass-shine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  .glass-shine:hover::before {
+    left: 100%;
+  }
+}
+
+/* 全局样式重写 */
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+[data-theme="dark"] {
+  --glass-bg: rgba(0, 0, 0, 0.2);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* 页面背景渐变 */
+body {
+  @apply bg-gradient-to-br from-blue-50 via-white to-purple-50;
+  min-height: 100vh;
+}
+
+[data-theme="dark"] body {
+  @apply bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900;
+}
+
+/* VitePress 原有样式的毛玻璃改造 */
+.VPNav {
+  @apply glass-nav !important;
+  backdrop-filter: blur(20px) !important;
+  background: var(--glass-bg) !important;
+  border-bottom: 1px solid var(--glass-border) !important;
+}
+
+.VPSidebar {
+  @apply glass rounded-r-2xl !important;
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(16px) !important;
+  border-right: 1px solid var(--glass-border) !important;
+}
+
+.VPContent {
+  @apply rounded-2xl !important;
+}
+
+.vp-doc {
+  @apply glass-card p-8 !important;
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+/* 按钮样式重写 */
+.VPButton {
+  @apply glass-button !important;
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+
+.VPButton:hover {
+  @apply scale-105 !important;
+  background: rgba(var(--vp-c-brand-1), 0.2) !important;
+}
+
+/* 搜索框样式 */
+.VPNavBarSearch {
+  @apply glass-input !important;
+}
+
+/* 代码块毛玻璃效果 */
+.vp-code-group, 
+div[class*="language-"] {
+  @apply glass rounded-2xl !important;
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(8px) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+
+/* 表格毛玻璃效果 */
+.vp-doc table {
+  @apply glass rounded-xl overflow-hidden !important;
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(6px) !important;
+}
+
+.vp-doc th,
+.vp-doc td {
+  @apply border-white/20 !important;
+}
+
+/* 引用块毛玻璃效果 */
+.vp-doc blockquote {
+  @apply glass-card !important;
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(6px) !important;
+}
+
+/* 自定义滚动条毛玻璃效果 */
+::-webkit-scrollbar {
+  @apply w-3 h-3;
+}
+
+::-webkit-scrollbar-track {
+  @apply glass rounded-full;
+  background: var(--glass-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  @apply glass rounded-full;
+  background: rgba(var(--vp-c-brand-1), 0.6);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--vp-c-brand-1), 0.8);
+}
+
+/* 动画效果 */
+* {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.fade-in-up {
+  @apply animate-fade-in-up;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .glass-card {
+    @apply rounded-xl mx-2;
+  }
+  
+  .VPNav {
+    backdrop-filter: blur(12px) !important;
+  }
+}

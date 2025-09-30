@@ -17,13 +17,27 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.13",
+    "@types/crypto-js": "^4.2.2",
+    "@types/node": "^24.6.0",
+    "autoprefixer": "^10.4.21",
+    "daisyui": "^5.1.26",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.13",
     "vitepress": "^1.0.0"
   },
   "engines": {
     "node": ">=18"
   },
   "dependencies": {
+    "@vueuse/core": "^13.9.0",
+    "ag-grid-community": "^34.2.0",
+    "ag-grid-vue3": "^34.2.0",
+    "axios": "^1.12.2",
     "chart.js": "^4.5.0",
-    "vue-chartjs": "^5.3.2"
+    "crypto-js": "^4.2.0",
+    "pinia": "^3.0.3",
+    "vue-chartjs": "^5.3.2",
+    "vue-router": "^4.5.1"
   }
 }
