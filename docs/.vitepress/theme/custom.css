@@ -1,3 +1,8 @@
+/* Tailwind CSS and DaisyUI */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* 原生VitePress主题样式 - 保持默认配色 */
 
 /* 基础响应式设计 */
@@ -42,4 +47,21 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--vp-c-brand-2);
+}
+
+/* Whitelist page - full width without container constraints */
+.whitelist-management {
+  margin: 0 !important;
+  padding: 0 !important;
+  max-width: 100% !important;
+}
+
+/* Remove default VitePress content padding for whitelist page */
+.vp-doc:has(.whitelist-management) {
+  padding: 0 !important;
+  max-width: 100% !important;
+}
+
+.VPContent:has(.whitelist-management) .content-container {
+  max-width: 100% !important;
 }

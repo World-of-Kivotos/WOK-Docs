@@ -12,7 +12,8 @@ export default defineConfig({
       { text: '首页', link: '/' },
       { text: '服务器介绍', link: '/server/' },
       { text: '使用协议', link: '/eula' },
-      { text: '常见问题', link: '/faq' }
+      { text: '常见问题', link: '/faq' },
+      { text: '白名单管理', link: '/whitelist' }
     ],
 
     // 侧边栏
