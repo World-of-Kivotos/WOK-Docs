@@ -355,7 +355,7 @@
                     :style="{ width: (player.health / 20) * 100 + '%' }"
                   ></div>
                 </div>
-                <span class="stat-value">{{ Math.round(player.health) }}/20</span>
+                <span class="stat-value">{{ Math.round(player.health) }}/50</span>
               </div>
               
               <div class="player-stat">
