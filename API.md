@@ -23,14 +23,6 @@ ConvenientAccess 提供了一套完整的 RESTful API，用于获取 Minecraft 1
 | `/api/v1/system/resources` | GET | 获取系统资源使用情况 |
 | `/api/v1/health` | GET | 简单的健康检查端点 |
 
-## 认证
-
-如果启用了 API 认证，需要在请求头中包含 API 密钥：
-
-```http
-Authorization: Bearer YOUR_API_KEY
-```
-
 ## 响应格式
 
 ### 成功响应
@@ -537,9 +529,8 @@ curl -X GET "http://your-server:8080/api/v1/server/status" \
 curl -X GET "http://your-server:8080/api/v1/worlds/list" \
      -H "Accept: application/json"
 
-# 带认证的请求
+# 获取性能数据
 curl -X GET "http://your-server:8080/api/v1/server/performance" \
-     -H "Authorization: Bearer YOUR_API_KEY" \
      -H "Accept: application/json"
 ```
 

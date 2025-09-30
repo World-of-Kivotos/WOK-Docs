@@ -134,21 +134,7 @@ export default defineConfig({
   // 站点地图
   sitemap: {
     hostname: 'https://docs.mcwok.cn'
-  },
-
-  // Vite 配置
-  vite: {
-    server: {
-      proxy: {
-        '/api': {
-          target: 'http://api.mcwok.cn:22222',  // 使用HTTP而不是HTTPS
-          changeOrigin: true,
-          secure: false,  // 禁用SSL验证
-          headers: {
-            'X-API-Key': 'sk-84wGfDajole8rMu2HHXkLFAKJMAmvl3t'
-          }
-        }
-      }
-    }
   }
+
+  // 移除Vite代理配置 - 服务器自己处理CORS
 })

@@ -411,19 +411,13 @@ const playersList = ref([])
 const worldsData = ref([])
 
 // API配置
-const API_BASE = import.meta.env.DEV
-  ? '/api/v1'  // 开发环境使用代理路径
-  : '/api/v1'  // 生产环境也使用代理路径
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://api.mcwok.cn/api/v1'
 
-// API认证配置
-const API_KEY = 'sk-84wGfDajole8rMu2HHXkLFAKJMAmvl3t'
-
-// 创建带认证的请求选项
+// 创建请求选项（移除鉴权）
 const createRequestOptions = () => ({
   method: 'GET',
   headers: {
     'Content-Type': 'application/json'
-    // X-API-Key 头部由 Vite 代理自动添加
   }
 })
 
