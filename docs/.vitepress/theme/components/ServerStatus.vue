@@ -337,9 +337,10 @@
         <h4 class="section-title">在线玩家 ({{ playersList.length }}人)</h4>
         <div class="players-grid">
           <div 
-            v-for="player in playersList.slice(0, 8)" 
+            v-for="player in displayedPlayers" 
             :key="player.uuid"
             class="player-card"
+            @click="fetchPlayerDetails(player.name)"
           >
             <div class="player-info">
               <span class="player-name">{{ player.name }}</span>
@@ -377,9 +378,13 @@
           </div>
         </div>
         
-        <div v-if="playersList.length > 8" class="more-players">
-          还有 {{ playersList.length - 8 }} 名玩家在线...
-        </div>
+        <button 
+          v-if="playersList.length > 8" 
+          @click="toggleShowAllPlayers" 
+          class="show-more-btn"
+        >
+          {{ showAllPlayers ? '收起玩家列表' : `展开查看全部 ${playersList.length} 名玩家` }}
+        </button>
       </div>
     </div>
     
@@ -387,6 +392,215 @@
     <div class="last-update">
       最后更新: {{ lastUpdate }} (每30秒自动刷新)
     </div>
+
+    <!-- 玩家详情弹窗 -->
+    <Teleport to="body">
+      <div v-if="showPlayerModal" class="modal-overlay" @click="closePlayerModal">
+        <div class="modal-content" @click.stop>
+          <!-- 加载状态 -->
+          <div v-if="playerDetailsLoading" class="modal-loading">
+            <div class="loading-spinner"></div>
+            <p>正在加载玩家数据...</p>
+          </div>
+
+          <!-- 错误状态 -->
+          <div v-else-if="playerDetailsError" class="modal-error">
+            <div class="error-icon">⚠</div>
+            <h3>加载失败</h3>
+            <p>{{ playerDetailsError }}</p>
+            <button @click="closePlayerModal" class="modal-btn">关闭</button>
+          </div>
+
+          <!-- 玩家详情 -->
+          <div v-else-if="playerDetails" class="player-details">
+            <!-- 头部 -->
+            <div class="details-header">
+              <div class="player-avatar">
+                <img :src="`https://mc-heads.net/avatar/${playerDetails.uuid}/100`" :alt="playerDetails.playerName">
+              </div>
+              <div class="player-title">
+                <h2>{{ playerDetails.playerName }}</h2>
+                <p class="player-uuid">UUID: {{ playerDetails.uuid }}</p>
+                <span :class="['online-badge', playerDetails.isOnline ? 'online' : 'offline']">
+                  {{ playerDetails.isOnline ? '在线' : '离线' }}
+                </span>
+              </div>
+              <button class="close-btn" @click="closePlayerModal">✕</button>
+            </div>
+
+            <!-- 基本信息 -->
+            <div class="details-section">
+              <h3 class="details-section-title">基本信息</h3>
+              <div class="info-grid">
+                <div class="info-item">
+                  <span class="info-label">游戏模式</span>
+                  <span class="info-value">{{ getGameModeText(playerDetails.gameMode) }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">首次登录</span>
+                  <span class="info-value">{{ formatDate(playerDetails.firstPlayed) }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">最后登录</span>
+                  <span class="info-value">{{ formatDate(playerDetails.lastPlayed) }}</span>
+                </div>
+                <div class="info-item" v-if="playerDetails.statistics">
+                  <span class="info-label">游戏时长</span>
+                  <span class="info-value">{{ formatPlayTime(playerDetails.statistics.playTime) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 在线玩家专属数据 -->
+            <template v-if="playerDetails.isOnline">
+              <!-- 位置信息 -->
+              <div class="details-section" v-if="playerDetails.location">
+                <h3 class="details-section-title">当前位置</h3>
+                <div class="location-info">
+                  <div class="info-row">
+                    <span class="info-label">世界</span>
+                    <span class="info-value">{{ playerDetails.location.world }} ({{ getDimensionText(playerDetails.location.dimension) }})</span>
+                  </div>
+                  <div class="info-row">
+                    <span class="info-label">坐标</span>
+                    <span class="info-value coords">
+                      X: {{ playerDetails.location.x.toFixed(1) }} 
+                      Y: {{ playerDetails.location.y.toFixed(1) }} 
+                      Z: {{ playerDetails.location.z.toFixed(1) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 状态信息 -->
+              <div class="details-section">
+                <h3 class="details-section-title">玩家状态</h3>
+                <div class="status-grid">
+                  <div class="status-card health-card">
+                    <div class="status-icon">♥</div>
+                    <div class="status-info">
+                      <span class="status-label">生命值</span>
+                      <div class="status-bar">
+                        <div class="status-fill health" :style="{ width: (playerDetails.health / playerDetails.maxHealth * 100) + '%' }"></div>
+                      </div>
+                      <span class="status-value">{{ playerDetails.health.toFixed(1) }}/{{ playerDetails.maxHealth.toFixed(1) }}</span>
+                    </div>
+                  </div>
+                  
+                  <div class="status-card food-card">
+                    <div class="status-icon">▲</div>
+                    <div class="status-info">
+                      <span class="status-label">饥饿值</span>
+                      <div class="status-bar">
+                        <div class="status-fill food" :style="{ width: (playerDetails.foodLevel / 20 * 100) + '%' }"></div>
+                      </div>
+                      <span class="status-value">{{ playerDetails.foodLevel }}/20</span>
+                    </div>
+                  </div>
+                  
+                  <div class="status-card exp-card">
+                    <div class="status-icon">★</div>
+                    <div class="status-info">
+                      <span class="status-label">经验等级</span>
+                      <div class="status-bar">
+                        <div class="status-fill exp" :style="{ width: (playerDetails.exp * 100) + '%' }"></div>
+                      </div>
+                      <span class="status-value">Lv.{{ playerDetails.level }} ({{ (playerDetails.exp * 100).toFixed(0) }}%)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 装备信息 -->
+              <div class="details-section" v-if="playerDetails.inventory?.armor && playerDetails.inventory.armor.length > 0">
+                <h3 class="details-section-title">装备栏</h3>
+                <div class="equipment-grid">
+                  <div v-for="item in playerDetails.inventory.armor" :key="item.slot" class="equipment-item">
+                    <div class="item-icon">{{ getItemIcon(item.type) }}</div>
+                    <div class="item-info">
+                      <span class="item-name">{{ formatItemName(item.type) }}</span>
+                      <span class="item-slot">{{ getSlotName(item.slot) }}</span>
+                      <div v-if="item.enchantments" class="item-enchants">
+                        <span v-for="(level, enchant) in item.enchantments" :key="enchant" class="enchant-badge">
+                          {{ formatEnchantName(enchant) }} {{ level }}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="item-durability" v-if="item.maxDurability">
+                      <div class="durability-bar">
+                        <div class="durability-fill" :style="{ 
+                          width: ((item.maxDurability - item.damage) / item.maxDurability * 100) + '%',
+                          backgroundColor: getDurabilityColor(item.damage, item.maxDurability)
+                        }"></div>
+                      </div>
+                      <span class="durability-text">{{ item.maxDurability - item.damage }}/{{ item.maxDurability }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 手持物品 -->
+              <div class="details-section" v-if="playerDetails.inventory?.mainHand || playerDetails.inventory?.offHand">
+                <h3 class="details-section-title">手持物品</h3>
+                <div class="hand-items">
+                  <div v-if="playerDetails.inventory.mainHand" class="hand-item">
+                    <span class="hand-label">主手</span>
+                    <div class="item-display">
+                      <span class="item-icon">{{ getItemIcon(playerDetails.inventory.mainHand.type) }}</span>
+                      <span class="item-name">{{ formatItemName(playerDetails.inventory.mainHand.type) }}</span>
+                      <span class="item-amount" v-if="playerDetails.inventory.mainHand.amount > 1">×{{ playerDetails.inventory.mainHand.amount }}</span>
+                    </div>
+                  </div>
+                  <div v-if="playerDetails.inventory.offHand" class="hand-item">
+                    <span class="hand-label">副手</span>
+                    <div class="item-display">
+                      <span class="item-icon">{{ getItemIcon(playerDetails.inventory.offHand.type) }}</span>
+                      <span class="item-name">{{ formatItemName(playerDetails.inventory.offHand.type) }}</span>
+                      <span class="item-amount" v-if="playerDetails.inventory.offHand.amount > 1">×{{ playerDetails.inventory.offHand.amount }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 游戏统计 -->
+              <div class="details-section" v-if="playerDetails.statistics">
+                <h3 class="details-section-title">游戏统计</h3>
+                <div class="stats-grid">
+                  <div class="stat-box">
+                    <div class="stat-icon">✕</div>
+                    <div class="stat-content">
+                      <span class="stat-value">{{ playerDetails.statistics.deaths }}</span>
+                      <span class="stat-label">死亡次数</span>
+                    </div>
+                  </div>
+                  <div class="stat-box">
+                    <div class="stat-icon">⚔</div>
+                    <div class="stat-content">
+                      <span class="stat-value">{{ playerDetails.statistics.mobKills }}</span>
+                      <span class="stat-label">生物击杀</span>
+                    </div>
+                  </div>
+                  <div class="stat-box">
+                    <div class="stat-icon">◉</div>
+                    <div class="stat-content">
+                      <span class="stat-value">{{ playerDetails.statistics.playerKills }}</span>
+                      <span class="stat-label">玩家击杀</span>
+                    </div>
+                  </div>
+                  <div class="stat-box">
+                    <div class="stat-icon">◆</div>
+                    <div class="stat-content">
+                      <span class="stat-value">{{ playerDetails.statistics.damageTaken.toFixed(0) }}</span>
+                      <span class="stat-label">受到伤害</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -410,16 +624,44 @@ const playersData = ref(null)
 const playersList = ref([])
 const worldsData = ref([])
 
+// 玩家列表展开状态
+const showAllPlayers = ref(false)
+
+// 玩家详情弹窗
+const showPlayerModal = ref(false)
+const playerDetails = ref(null)
+const playerDetailsLoading = ref(false)
+const playerDetailsError = ref(null)
+
 // API配置
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://api.mcwok.cn/api/v1'
+const API_TOKEN = import.meta.env.VITE_API_TOKEN
 
-// 创建请求选项（移除鉴权）
-const createRequestOptions = () => ({
-  method: 'GET',
-  headers: {
+// 调试：打印环境变量状态
+console.log('环境变量加载状态:')
+console.log('- API_BASE:', API_BASE)
+console.log('- API_TOKEN 已配置:', !!API_TOKEN)
+console.log('- API_TOKEN 长度:', API_TOKEN ? API_TOKEN.length : 0)
+if (API_TOKEN) {
+  console.log('- API_TOKEN 前缀:', API_TOKEN.substring(0, 10) + '...')
+}
+
+// 创建请求选项（添加鉴权）
+const createRequestOptions = (needAuth = false) => {
+  const headers = {
     'Content-Type': 'application/json'
   }
-})
+  
+  // 如果需要鉴权且有 API Token
+  if (needAuth && API_TOKEN) {
+    headers['X-API-Key'] = API_TOKEN
+  }
+  
+  return {
+    method: 'GET',
+    headers
+  }
+}
 
 // 连接状态
 const connectionStatus = computed(() => {
@@ -443,6 +685,12 @@ const playerPercentage = computed(() => {
   const current = playersData.value.online_count || 0
   const max = playersData.value.max_players || 1
   return Math.round((current / max) * 100)
+})
+
+// 显示的玩家列表（根据展开状态决定）
+const displayedPlayers = computed(() => {
+  if (!playersList.value) return []
+  return showAllPlayers.value ? playersList.value : playersList.value.slice(0, 8)
 })
 
 const filteredWorldsData = computed(() => {
@@ -669,6 +917,186 @@ const getPingClass = (ping) => {
   if (ping < 50) return 'good'
   if (ping < 100) return 'ok'
   return 'bad'
+}
+
+// 切换显示全部玩家
+const toggleShowAllPlayers = () => {
+  showAllPlayers.value = !showAllPlayers.value
+}
+
+// 获取玩家详细信息
+const fetchPlayerDetails = async (playerName) => {
+  if (!playerName) return
+  
+  showPlayerModal.value = true
+  playerDetailsLoading.value = true
+  playerDetailsError.value = null
+  playerDetails.value = null
+  
+  try {
+    // 检查 API Token 是否配置
+    if (!API_TOKEN) {
+      throw new Error('API Token 未配置，请在 .env 文件中设置 VITE_API_TOKEN')
+    }
+    
+    const requestOptions = createRequestOptions(true) // 需要鉴权
+    console.log('请求玩家数据:', playerName)
+    console.log('API Token:', API_TOKEN ? `${API_TOKEN.substring(0, 10)}...` : '未配置')
+    
+    const response = await fetch(`${API_BASE}/player?name=${encodeURIComponent(playerName)}`, requestOptions)
+    
+    if (!response.ok) {
+      if (response.status === 401) {
+        throw new Error('API 认证失败，请检查 .env 文件中的 VITE_API_TOKEN 是否正确')
+      } else if (response.status === 404) {
+        throw new Error('玩家不在线或不存在')
+      } else if (response.status === 429) {
+        throw new Error('查询请求过多，请稍后再试')
+      } else if (response.status === 504) {
+        throw new Error('服务器繁忙，请稍后重试')
+      }
+      throw new Error(`请求失败: ${response.status}`)
+    }
+    
+    const result = await response.json()
+    
+    if (result.success) {
+      playerDetails.value = result.data
+      console.log('成功获取玩家数据:', result.data)
+    } else {
+      throw new Error(result.error || '获取玩家数据失败')
+    }
+  } catch (err) {
+    playerDetailsError.value = err.message
+    console.error('获取玩家详情失败:', err)
+  } finally {
+    playerDetailsLoading.value = false
+  }
+}
+
+// 关闭玩家详情弹窗
+const closePlayerModal = () => {
+  showPlayerModal.value = false
+  playerDetails.value = null
+  playerDetailsError.value = null
+}
+
+// 格式化日期
+const formatDate = (timestamp) => {
+  if (!timestamp) return '未知'
+  return new Date(timestamp).toLocaleString('zh-CN')
+}
+
+// 格式化游戏时长
+const formatPlayTime = (seconds) => {
+  if (!seconds) return '0小时'
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.floor((seconds % 3600) / 60)
+  return hours > 0 ? `${hours}小时${minutes}分钟` : `${minutes}分钟`
+}
+
+// 获取游戏模式文本
+const getGameModeText = (mode) => {
+  const modeMap = {
+    'SURVIVAL': '生存模式',
+    'CREATIVE': '创造模式',
+    'ADVENTURE': '冒险模式',
+    'SPECTATOR': '旁观模式',
+    'UNKNOWN': '未知'
+  }
+  return modeMap[mode] || mode
+}
+
+// 获取维度文本
+const getDimensionText = (dimension) => {
+  const dimMap = {
+    'NORMAL': '主世界',
+    'NETHER': '下界',
+    'THE_END': '末地'
+  }
+  return dimMap[dimension] || dimension
+}
+
+// 获取物品图标（简化版，使用符号）
+const getItemIcon = (itemType) => {
+  if (!itemType) return '?'
+  const type = itemType.toLowerCase()
+  
+  // 装备类
+  if (type.includes('helmet')) return '⌂'
+  if (type.includes('chestplate')) return '▣'
+  if (type.includes('leggings')) return '║'
+  if (type.includes('boots')) return '▼'
+  
+  // 武器工具类
+  if (type.includes('sword')) return '⚔'
+  if (type.includes('pickaxe')) return '⛏'
+  if (type.includes('axe')) return '◈'
+  if (type.includes('shovel')) return '▽'
+  if (type.includes('hoe')) return '⚒'
+  if (type.includes('bow')) return '◐'
+  
+  // 其他常见物品
+  if (type.includes('diamond')) return '◆'
+  if (type.includes('torch')) return '☼'
+  if (type.includes('food') || type.includes('apple')) return '●'
+  
+  return '□'
+}
+
+// 格式化物品名称
+const formatItemName = (itemType) => {
+  if (!itemType) return '未知物品'
+  return itemType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+}
+
+// 格式化附魔名称
+const formatEnchantName = (enchantName) => {
+  const enchantMap = {
+    'protection': '保护',
+    'fire_protection': '火焰保护',
+    'feather_falling': '摔落保护',
+    'blast_protection': '爆炸保护',
+    'projectile_protection': '弹射物保护',
+    'thorns': '荆棘',
+    'respiration': '水下呼吸',
+    'aqua_affinity': '水下速掘',
+    'sharpness': '锋利',
+    'smite': '亡灵杀手',
+    'bane_of_arthropods': '节肢杀手',
+    'knockback': '击退',
+    'fire_aspect': '火焰附加',
+    'looting': '抢夺',
+    'efficiency': '效率',
+    'silk_touch': '精准采集',
+    'unbreaking': '耐久',
+    'fortune': '时运',
+    'power': '力量',
+    'punch': '冲击',
+    'flame': '火矢',
+    'infinity': '无限',
+    'mending': '经验修补'
+  }
+  return enchantMap[enchantName] || enchantName
+}
+
+// 获取装备槽位名称
+const getSlotName = (slot) => {
+  const slotMap = {
+    'head': '头部',
+    'chest': '胸部',
+    'legs': '腿部',
+    'feet': '脚部'
+  }
+  return slotMap[slot] || slot
+}
+
+// 获取耐久度颜色
+const getDurabilityColor = (damage, maxDurability) => {
+  const percent = ((maxDurability - damage) / maxDurability) * 100
+  if (percent > 50) return '#10b981'
+  if (percent > 25) return '#f59e0b'
+  return '#ef4444'
 }
 
 // 组件挂载
@@ -1460,6 +1888,596 @@ onMounted(() => {
   .error-icon {
     margin-right: 0;
     margin-bottom: 16px;
+  }
+}
+
+/* 展开按钮 */
+.show-more-btn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px 24px;
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand);
+  border: 1px solid var(--vp-c-brand-light);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.show-more-btn:hover {
+  background: var(--vp-c-brand);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* 玩家卡片点击效果 */
+.player-card {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.player-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.player-card:hover::before {
+  opacity: 1;
+}
+
+.player-card:active {
+  transform: scale(0.98);
+}
+
+/* 玩家详情弹窗 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 16px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 弹窗加载和错误状态 */
+.modal-loading,
+.modal-error {
+  padding: 60px 40px;
+  text-align: center;
+  color: var(--vp-c-text-2);
+}
+
+.modal-loading .loading-spinner {
+  margin: 0 auto 20px;
+}
+
+.modal-error .error-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.modal-error h3 {
+  margin: 0 0 8px 0;
+  color: var(--vp-c-text-1);
+}
+
+.modal-error p {
+  margin: 0 0 20px 0;
+  color: var(--vp-c-text-2);
+}
+
+.modal-btn {
+  padding: 10px 24px;
+  background: var(--vp-c-brand);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.modal-btn:hover {
+  background: var(--vp-c-brand-dark);
+}
+
+/* 玩家详情内容 */
+.player-details {
+  padding: 32px;
+}
+
+/* 详情头部 */
+.details-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--vp-c-divider);
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.player-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 3px solid var(--vp-c-brand);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.player-avatar img {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+.player-title {
+  flex: 1;
+}
+
+.player-title h2 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--vp-c-text-1);
+}
+
+.player-uuid {
+  font-size: 12px;
+  color: var(--vp-c-text-3);
+  font-family: monospace;
+  margin: 0 0 12px 0;
+}
+
+.online-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.online-badge.online {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.online-badge.offline {
+  background: rgba(107, 114, 128, 0.1);
+  color: #6b7280;
+  border: 1px solid rgba(107, 114, 128, 0.3);
+}
+
+.close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.close-btn:hover {
+  background: var(--vp-c-brand);
+  color: white;
+  transform: rotate(90deg);
+}
+
+/* 详情区块 */
+.details-section {
+  margin-bottom: 24px;
+}
+
+.details-section-title {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+  display: flex;
+  align-items: center;
+}
+
+.details-section-title::before {
+  content: '';
+  width: 4px;
+  height: 18px;
+  background: var(--vp-c-brand);
+  border-radius: 2px;
+  margin-right: 12px;
+}
+
+/* 信息网格 */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 8px;
+  border: 1px solid var(--vp-c-divider-light);
+}
+
+.info-label {
+  font-size: 12px;
+  color: var(--vp-c-text-2);
+}
+
+.info-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+/* 位置信息 */
+.location-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 8px;
+  border: 1px solid var(--vp-c-divider-light);
+}
+
+.info-value.coords {
+  font-family: monospace;
+  background: var(--vp-c-bg);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* 状态卡片 */
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.status-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 8px;
+  border: 1px solid var(--vp-c-divider-light);
+}
+
+.status-icon {
+  font-size: 32px;
+}
+
+.status-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.status-label {
+  font-size: 12px;
+  color: var(--vp-c-text-2);
+}
+
+.status-bar {
+  height: 8px;
+  background: var(--vp-c-divider-light);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.status-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease-in-out;
+}
+
+.status-fill.health {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+.status-fill.food {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+.status-fill.exp {
+  background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+}
+
+.status-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+/* 装备网格 */
+.equipment-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.equipment-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 8px;
+  border: 1px solid var(--vp-c-divider-light);
+}
+
+.item-icon {
+  font-size: 28px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--vp-c-bg);
+  border-radius: 6px;
+}
+
+.item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.item-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+.item-slot {
+  font-size: 11px;
+  color: var(--vp-c-text-3);
+}
+
+.item-enchants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.enchant-badge {
+  padding: 2px 6px;
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand);
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.item-durability {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 80px;
+}
+
+.durability-bar {
+  height: 6px;
+  background: var(--vp-c-divider-light);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.durability-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease-in-out, background-color 0.3s;
+}
+
+.durability-text {
+  font-size: 10px;
+  color: var(--vp-c-text-2);
+  text-align: right;
+}
+
+/* 手持物品 */
+.hand-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+}
+
+.hand-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 8px;
+  border: 1px solid var(--vp-c-divider-light);
+}
+
+.hand-label {
+  font-size: 11px;
+  color: var(--vp-c-text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.item-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.item-display .item-icon {
+  font-size: 24px;
+}
+
+.item-display .item-name {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vp-c-text-1);
+}
+
+.item-amount {
+  font-size: 12px;
+  color: var(--vp-c-text-2);
+  background: var(--vp-c-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* 游戏统计 */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 8px;
+  border: 1px solid var(--vp-c-divider-light);
+  text-align: center;
+}
+
+.stat-icon {
+  font-size: 32px;
+}
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-box .stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--vp-c-brand);
+}
+
+.stat-box .stat-label {
+  font-size: 12px;
+  color: var(--vp-c-text-2);
+}
+
+/* 响应式 - 弹窗 */
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 0;
+  }
+  
+  .modal-content {
+    max-height: 100vh;
+    border-radius: 0;
+  }
+  
+  .player-details {
+    padding: 20px;
+  }
+  
+  .details-header {
+    flex-wrap: wrap;
+  }
+  
+  .player-avatar {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .player-title h2 {
+    font-size: 22px;
+  }
+  
+  .info-grid,
+  .status-grid,
+  .stats-grid,
+  .hand-items {
+    grid-template-columns: 1fr;
+  }
+  
+  .equipment-item {
+    flex-wrap: wrap;
+  }
+  
+  .item-durability {
+    width: 100%;
   }
 }
 </style>

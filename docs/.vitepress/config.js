@@ -32,6 +32,12 @@ export default defineConfig({
           items: [
             { text: '新人引导', link: '/millennium/newcomer-guide' }
           ]
+        },
+        {
+          text: '圣三一综合学园',
+          items: [
+            { text: '新人引导', link: '/millennium/31' }
+          ]
         }
       ],
       '/server/': [
@@ -49,6 +55,12 @@ export default defineConfig({
           items: [
             { text: '新人引导', link: '/millennium/newcomer-guide' }
           ]
+        },
+        {
+          text: '圣三一综合学园',
+          items: [
+            { text: '新人引导', link: '/millennium/31' }
+          ]
         }
       ],
       '/millennium/': [
@@ -65,6 +77,12 @@ export default defineConfig({
           text: '千年科技学院',
           items: [
             { text: '新人引导', link: '/millennium/newcomer-guide' }
+          ]
+        },
+        {
+          text: '圣三一综合学园',
+          items: [
+            { text: '新人引导', link: '/millennium/31' }
           ]
         }
       ]

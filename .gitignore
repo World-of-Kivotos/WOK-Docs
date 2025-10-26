@@ -10,6 +10,12 @@ dist/
 .vitepress/dist/
 .vitepress/cache/
 
+# VitePress specific
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+**/.vitepress/cache/
+**/.vitepress/dist/
+
 # Environment variables
 .env
 .env.local

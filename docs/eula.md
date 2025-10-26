@@ -6,14 +6,14 @@
 继续使用本服务器即表示您已阅读、理解并同意遵守本协议的所有条款。
 :::
 
-## 📋 协议信息
+## 协议信息
 
 - **版本**：V1.0
 - **更新日期**：2025年8月12日
 - **生效日期**：2025年8月12日
 - **版权所有**：2025© WOK管理组
 
-## 📖 定义说明
+## 定义说明
 
 ### "WOK"
 指 World of Kivotos 服务器及其管理团队。
@@ -34,7 +34,7 @@ WOK 服务器内标明WOK 建筑作品的著作权（包括复制权、修改权
 
 未经 WOK 授权，用户不获得任何建筑内容的所有权或使用权。
 
-## 🚫 严禁行为
+## 严禁行为
 
 用户禁止以下行为：
 
@@ -50,7 +50,7 @@ WOK 服务器内标明WOK 建筑作品的著作权（包括复制权、修改权
 ### 技术规避
 - 通过逆向工程、插件提取等技术手段获取建筑内容
 
-## ✅ 有限授权
+## 有限授权
 
 用户仅获得以下非排他性、不可转让权利：
 
@@ -69,11 +69,11 @@ WOK 服务器内标明WOK 建筑作品的著作权（包括复制权、修改权
 ### 费用承担
 侵权者需承担 WOK 的律师费、取证费、诉讼费等全部费用。
 
-## 🛡️ 免责声明
+## 免责声明
 
 用户因违反本协议导致的第三方索赔，需自行承担全部法律责任。 <mcreference link="https://github.com/World-of-Kivotos/WOK-EULA/blob/main/EULA.md" index="0">0</mcreference>
 
-## 📝 协议变更与终止
+## 协议变更与终止
 
 - WOK 保留随时更新本协议的权利，通过服务器公告/QQ群公告公示生效 <mcreference link="https://github.com/World-of-Kivotos/WOK-EULA/blob/main/EULA.md" index="0">0</mcreference>
 - 用户继续使用服务器即视为接受新协议 <mcreference link="https://github.com/World-of-Kivotos/WOK-EULA/blob/main/EULA.md" index="0">0</mcreference>
