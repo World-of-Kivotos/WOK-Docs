@@ -126,7 +126,7 @@ export default defineConfig({
 
     // 编辑链接
     editLink: {
-      pattern: 'https://github.com/your-repo/edit/main/docs/:path',
+      pattern: 'https://github.com/World-of-Kivotos/WOK-Docs/edit/main/docs/:path',
       text: '在 GitHub 上编辑此页面'
     },
 
