@@ -28,6 +28,12 @@ export default defineConfig({
           ]
         },
         {
+          text: '阿拜多斯高等学院',
+          items: [
+            { text: '新人引导', link: '/abydos/newcomer-guide' }
+          ]
+        },
+        {
           text: '千年科技学院',
           items: [
             { text: '新人引导', link: '/millennium/newcomer-guide' }
@@ -51,6 +57,12 @@ export default defineConfig({
           ]
         },
         {
+          text: '阿拜多斯高等学院',
+          items: [
+            { text: '新人引导', link: '/abydos/newcomer-guide' }
+          ]
+        },
+        {
           text: '千年科技学院',
           items: [
             { text: '新人引导', link: '/millennium/newcomer-guide' }
@@ -71,6 +83,41 @@ export default defineConfig({
             { text: '游戏玩法', link: '/server/gameplay' },
             { text: '游戏安装指引', link: '/server/installation' },
             { text: '加入指南', link: '/server/join' }
+          ]
+        },
+        {
+          text: '阿拜多斯高等学院',
+          items: [
+            { text: '新人引导', link: '/abydos/newcomer-guide' }
+          ]
+        },
+        {
+          text: '千年科技学院',
+          items: [
+            { text: '新人引导', link: '/millennium/newcomer-guide' }
+          ]
+        },
+        {
+          text: '圣三一综合学园',
+          items: [
+            { text: '新人引导', link: '/millennium/31' }
+          ]
+        }
+      ],
+      '/abydos/': [
+        {
+          text: '服务器信息',
+          items: [
+            { text: '服务器介绍', link: '/server/' },
+            { text: '游戏玩法', link: '/server/gameplay' },
+            { text: '游戏安装指引', link: '/server/installation' },
+            { text: '加入指南', link: '/server/join' }
+          ]
+        },
+        {
+          text: '阿拜多斯高等学院',
+          items: [
+            { text: '新人引导', link: '/abydos/newcomer-guide' }
           ]
         },
         {
